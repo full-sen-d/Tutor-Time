@@ -1,0 +1,36 @@
+ <link rel="stylesheet" href="LoginPage.css">
+<body> 
+    <div class="login-box">
+        <div>    
+        <button class="login-button" onclick="signin()">Sign in</button>
+        </div>
+        <br> 
+        <div>
+            <button class="login-button" onclick="signout()"> Sign out</button>
+        </div>
+        <br>
+        <div> 
+        <button class="login-button" onclick="next()"> Next </button>
+        </div>
+    </div>
+   
+    
+    
+
+<script>
+        function signin() {
+            console.log("Signing in");
+            var provider = new firebase.auth.GoogleAuthProvider();
+            firebase.auth().signInWithRedirect(provider).then(function(result) { 
+                window.location.replace("fbtest.html");
+            });
+            
+        function signout() {
+            console.log("Signing out");
+            firebase.auth().signOut().then(function() {
+            });
+        }
+            
+        <a href="http://www.google.com">Google</a> 
+</script>
+</body>

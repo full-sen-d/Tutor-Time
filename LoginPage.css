@@ -1,0 +1,41 @@
+
+body {
+    backface-visibility: visible;
+    background-color: whitesmoke;
+}
+
+.login-box{
+    border-style: solid;
+    border-color: green;
+    border-width: thick;
+    text-align: center;
+    background-color: navy;
+    color: whitesmoke;
+    padding: 40px;
+    border-radius: 10px;
+    margin-top: 250px;
+    margin-left:175px;
+    width:960px;
+    height: 400px;
+        } 
+
+.login-page{
+	background-color: green;
+        }
+
+.login-button{
+  border-width: 0px;
+  border-radius: 5px;
+  border-color: whitesmoke; 
+  margin-left: 15px;
+  margin-top; 500px;
+  background-color: green;  
+  color: white;
+  padding: 10px;
+  text-align: center;
+  font-size: 16px;
+}
+
+
+
+      

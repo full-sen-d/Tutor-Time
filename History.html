@@ -17,14 +17,14 @@
         
         // Initialize Firebase
          var config = {
-    apiKey: "AIzaSyC33WzynRyMPuF6QZONZ1mrIaYH_vvZn0c",
-    authDomain: "tutortime-6b012.firebaseapp.com",
-    databaseURL: "https://tutortime-6b012.firebaseio.com",
-    projectId: "tutortime-6b012",
-    storageBucket: "tutortime-6b012.appspot.com",
-    messagingSenderId: "8696144559"
-  };
-  firebase.initializeApp(config);
+            apiKey: "AIzaSyC33WzynRyMPuF6QZONZ1mrIaYH_vvZn0c",
+            authDomain: "tutortime-6b012.firebaseapp.com",
+            databaseURL: "https://tutortime-6b012.firebaseio.com",
+            projectId: "tutortime-6b012",
+            storageBucket: "tutortime-6b012.appspot.com",
+            messagingSenderId: "8696144559"
+          };
+          firebase.initializeApp(config);
                 
         // Check to see if you are logged in
         firebase.auth().onAuthStateChanged(function(user) {
@@ -137,7 +137,6 @@
             var nameValue = twitdoc.value;
             var imgValue = twitimg.innerHTML;
             var js_time = Date.now();
-            var tweetid = firebase.database().ref('tweets/' + userId + "/").push({tweet: nameValue, time: js_time, img: imgValue});
             twitdoc.value = "";
             console.log("tweet written")
             

@@ -1,0 +1,128 @@
+{
+  "chemTweets" : {
+    "1orXexScHnPnaCSgfO8HKi024Vn2" : {
+      "-LdUXMiKLRfWuxcOKZbH" : {
+        "img" : "",
+        "time" : 1556381006766,
+        "tweet" : "testing"
+      }
+    }
+  },
+  "physicsTweets" : {
+    "1orXexScHnPnaCSgfO8HKi024Vn2" : {
+      "-LdU_kcI1YQRvl0WEwOv" : {
+        "img" : "",
+        "time" : 1556381895232,
+        "tweet" : "Wsp"
+      }
+    }
+  },
+  "historyTweets" : {
+    "1orXexScHnPnaCSgfO8HKi024Vn2" : {
+      "-LdU_kcI1YQRvl0WEwOv" : {
+        "img" : "",
+        "time" : 1556381895232,
+        "tweet" : "Wsp"
+      }
+    }
+  },
+  "spanishTweets" : {
+    "1orXexScHnPnaCSgfO8HKi024Vn2" : {
+      "-LdU_kcI1YQRvl0WEwOv" : {
+        "img" : "",
+        "time" : 1556381895232,
+        "tweet" : "Wsp"
+      }
+    }
+  },
+  "mathTweets" : {
+    "1orXexScHnPnaCSgfO8HKi024Vn2" : {
+      "-LdU_kcI1YQRvl0WEwOv" : {
+        "img" : "",
+        "time" : 1556381895232,
+        "tweet" : "Wsp"
+      }
+    }
+  },
+  "mandarinTweets" : {
+    "1orXexScHnPnaCSgfO8HKi024Vn2" : {
+      "-LdU_kcI1YQRvl0WEwOv" : {
+        "img" : "",
+        "time" : 1556381895232,
+        "tweet" : "Wsp"
+      }
+    }
+  },
+  "latinTweets" : {
+    "1orXexScHnPnaCSgfO8HKi024Vn2" : {
+      "-LdU_kcI1YQRvl0WEwOv" : {
+        "img" : "",
+        "time" : 1556381895232,
+        "tweet" : "Wsp"
+      }
+    }
+  },
+  "geographyTweets" : {
+    "1orXexScHnPnaCSgfO8HKi024Vn2" : {
+      "-LdU_kcI1YQRvl0WEwOv" : {
+        "img" : "",
+        "time" : 1556381895232,
+        "tweet" : "Wsp"
+      }
+    }
+  },
+  "general_scienceTweets" : {
+    "1orXexScHnPnaCSgfO8HKi024Vn2" : {
+      "-LdU_kcI1YQRvl0WEwOv" : {
+        "img" : "",
+        "time" : 1556381895232,
+        "tweet" : "Wsp"
+      }
+    }
+  },
+  "frenchTweets" : {
+    "1orXexScHnPnaCSgfO8HKi024Vn2" : {
+      "-LdU_kcI1YQRvl0WEwOv" : {
+        "img" : "",
+        "time" : 1556381895232,
+        "tweet" : "Wsp"
+      }
+    }
+  },
+  "englishTweets" : {
+    "1orXexScHnPnaCSgfO8HKi024Vn2" : {
+      "-LdU_kcI1YQRvl0WEwOv" : {
+        "img" : "",
+        "time" : 1556381895232,
+        "tweet" : "Wsp"
+      }
+    }
+  },
+  "computer_scienceTweets" : {
+    "1orXexScHnPnaCSgfO8HKi024Vn2" : {
+      "-LdU_kcI1YQRvl0WEwOv" : {
+        "img" : "",
+        "time" : 1556381895232,
+        "tweet" : "Wsp"
+      }
+    }
+  },
+
+  "users" : {
+    "1orXexScHnPnaCSgfO8HKi024Vn2" : {
+      "email" : "sloan.sobie@ucc.on.ca",
+      "profile_picture" : "https://lh3.googleusercontent.com/-v85nw9Syga4/AAAAAAAAAAI/AAAAAAAAAZg/O92mtLmWwEM/photo.jpg",
+      "username" : "Sloan Sobie"
+    },
+    "m1SZOkQ93xR8IoOcxtWnaF0nibq0" : {
+      "email" : "dcrawford@ucc.on.ca",
+      "profile_picture" : "https://lh3.googleusercontent.com/-rI-udG5swZA/AAAAAAAAAAI/AAAAAAAAI2w/V7AqUC9xr24/photo.jpg",
+      "username" : "David Crawford"
+    },
+    "vUvDYGiZxcaweMf5qWeMTeAXfYl0" : {
+      "email" : "mhoel@ucc.on.ca",
+      "profile_picture" : "https://lh6.googleusercontent.com/-l2NF69h4UG4/AAAAAAAAAAI/AAAAAAAACzw/V1pCOyunEko/photo.jpg",
+      "username" : "Mark Hoel"
+    }
+  }
+}

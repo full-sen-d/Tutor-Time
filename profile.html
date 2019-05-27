@@ -163,8 +163,8 @@
         
         function chgBio() {
             var newBio = document.getElementById("newbio").value;
-            if (newBio.length > 30) {
-                alert("Your bio cannot be longer than 30 characters");
+            if (newBio.length > 120) {
+                alert("Your bio cannot be longer than 120 characters");
             } 
             else {
                 firebase.database().ref('users/' + userId).update({
@@ -185,8 +185,8 @@
         
         function chgAge() {
             var newage = document.getElementById("newage").value;
-            if (newage.length > 30) {
-                alert("Your bio cannot be longer than 30 characters");
+            if (newage.length > 3) {
+                alert("Your bio cannot be longer than 3 characters");
             } 
             else {
                 firebase.database().ref('users/' + userId).update({

@@ -6,9 +6,9 @@
     <script src="https://apis.google.com/js/platform.js" async defer></script>
 
     <style>
-        tr:hover {background-color: #f5f5f5;}
+        tr:hover {background-color: green;}
         th, td {
-            border-bottom: 1px solid #ddd;
+            border-bottom: 1px solid whitesmoke;
         }
     
     </style>
@@ -97,7 +97,7 @@
         
         function updatetweets(data) {
             //var mylist = "<ul>";
-            var mytab = "<table style='border-collapse: collapse;'>";
+            var mytab = "<table style='color:whitesmoke; font-size: 18px; font-family:monospace; border-collapse: collapse;'>";
             users = data[1]; // put on top, because changed data - not good coding change later
             data = data[0];
             

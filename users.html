@@ -3,8 +3,6 @@
     <link rel="stylesheet" href="css.css" >
     <script src="https://www.gstatic.com/firebasejs/5.7.3/firebase.js"></script>
     <script src="https://apis.google.com/js/platform.js" async defer></script>
-    
-    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
  
     <script>
         
@@ -94,21 +92,20 @@
                 userId: userId
             });
         }
-        
+
         async function showUsers(data, uID) {
             //var mylist = "<ul>";
-            var mytab = "<table id='myTable'><tr class='header'><th>Profile Pic</th><th>Username</th><th>Email</th><tr>";
+            var mytab = "<table style='color:whitesmoke; border-collapse: collapse; font-size:16px; border: 3px solid green;' id='myTable'><tr style='border-left: 2px solid green;  padding: 15px; '><th style='padding: 5px;'>Profile Pic</th><th style='border-left: 2px solid green;  padding: 15px; '>Username</th><th style='border-left: 2px solid green;  padding: 15px; '>Email</th>";
             users = data[1]; // put on top, because changed data - not good coding change later
             data = data[0];
             var c = 0;
-            var isFriend;
             //alert(uID);
             
             for (var u in users) {
                 c = c+1;
-                mytab = mytab + "<tr>";
+                mytab = mytab + "<tr style='border-left: 2px solid green;  padding: 15px; '>";
                 
-                var uAge, uRecent, uFavorite, uPoints, uBio;
+                var uAge, uBio;
                 if (users[u].age==null){
                     firebase.database().ref('users/' + users[u].userId + "/").update({age: "N/A"});
                     uAge = "N/A";
@@ -123,27 +120,6 @@
                 else{
                     uBio = users[u].bio;
                 }
-                if (users[u].recent==null){
-                    firebase.database().ref('users/' + users[u].userId + "/").update({recent: "N/A"});
-                    uRecent = "N/A";
-                }
-                else{
-                    uRecent = users[u].recent;
-                }
-                if (users[u].book==null){
-                    firebase.database().ref('users/' + users[u].userId + "/").update({book: "N/A"});
-                    uFavorite = "N/A";
-                }
-                else{
-                    uFavorite = users[u].book;
-                }
-                if (users[u].points==null){
-                    firebase.database().ref('users/' + users[u].userId + "/").update({points: 0});
-                    uPoints = 0;
-                }
-                else{
-                    uPoints = users[u].points;
-                }
                 
                 var display;
                 if (users[u].newName!=null){
@@ -154,8 +130,8 @@
                 }
                 mytab = mytab + "<td><center><img class='avatar' onclick='openUser(`" + display + "`,`" + users[u].email + "`,`" + users[u].profile_picture + "`,`" + uAge + "`,`" + "`)' src='" + users[u].profile_picture + "' width='60px'></center></td>";
                 
-                mytab = mytab + "<td>" + display + "</td>";
-                mytab = mytab + "<td>" + users[u].email + "</td>";
+                mytab = mytab + "<td style='border-left: 2px solid green;  padding: 15px; '>" + display + "</td>";
+                mytab = mytab + "<td style='border-left: 2px solid green;  padding: 15px; '>" + users[u].email + "</td>";
                 
                 //alert(users[u].username);
                 
@@ -168,106 +144,7 @@
             //mytdiv.innerHTML = mylist;
             mytdiv.innerHTML = mytab;
         }
-        
-        function checkUser(usersId, uID){
-            
-            //alert(usersId);
-            
-            var isFriend = false;
-            
-            return new Promise(function(resolve, reject) {
-                firebase.database().ref('/users/' + uID + '/friends').once('value').then(function(snapshot) { 
-                    var userdata = (snapshot.val());
-                    dataarray = [userdata];
-                    console.log(dataarray);
 
-                    users2 = userdata;
-
-                    for (var x in users2) {
-                        //alert(users2[x].userId + " = " + usersId);
-                        if (users2[x].uName == usersId || usersId == name) {
-                            isFriend = true;
-                            //alert(users2[x].userId);
-                        }
-                    }
-
-                    resolve(isFriend);
-
-                });
-                
-            });
-        }
-        
-        function addFriend(userCount){
-            //firebase.database().ref('users/' + userId + "/friends").push({uName: userName});
-            alert(userCount);
-            var added = document.getElementById("add" + userCount);
-            added.src = "check.png";
-            added.onclick = "";
-            added.style.filter = "brightness(1)";
-            
-            firebase.database().ref('/users').once('value').then(function(snapshot) {
-                var data = (snapshot.val());
-                if (data == null) {
-                  console.log("No data found at /users/" + userId);  
-                } else {
-
-                    var userdata = (snapshot.val());
-                    if (userdata != null) {
-                       dataarray = [data,userdata]
-                       console.log(dataarray)
-                       users1 = dataarray[1];
-                        var count = 0;
-                       for (var u in users1){
-                           count = count+1;
-                           if (count == userCount){
-                               //alert("yes");
-                               //alert(count);
-                                //alert(display1);
-                                //alert(users1[u].userId);
-                                firebase.database().ref('users/' + userId + "/friends/").push({uName: users1[u].username, userId: users1[u].userId});
-                           }
-                       }
-                    }
-                }
-            });
-            
-        }
-        
-        // write tweets to firebase
-        /*function tweet() {
-            
-            var twitdoc = document.getElementById("twit");
-            var twitimg = document.getElementById("imgTest");
-            var nameValue = twitdoc.value;
-            var imgValue = twitimg.innerHTML;
-            var js_time = Date.now();
-            
-            var tweetid = firebase.database().ref('tweets/' + userId + "/").push({tweet: nameValue, time: js_time, img: imgValue});
-            twitdoc.value = "";
-            console.log("tweet written")
-            
-            firebase.database().ref('/tweets').once('value').then(function(snapshot) {
-                    var data = (snapshot.val());
-                    if (data == null) {
-                      console.log("No data found at /tweets/" + userId);  
-                    } else { 
-                        firebase.database().ref('/users').once('value').then(function(snapshot) { 
-                        var userdata = (snapshot.val());
-                        if (userdata != null) {
-                           dataarray = [data,userdata]
-                           console.log(dataarray)
-                           updatetweets(dataarray); 
-                        }
-                      });
-                    }
-                });
-            
-            
-            
-            // The unique key stored in tweetid is based on a timestamp, so list items will automatically be ordered chronologically. Because Firebase generates a unique key for each tweet, no write conflicts will occur if multiple users add a post at the same time. https://firebase.google.com/docs/database/admin/save-data
-            
-        }*/
         
         function signin() {
             console.log("Signing in");
@@ -316,7 +193,7 @@
             users = data[1];
             data = data[0];
             photodiv = document.getElementById("modalphoto");
-            var modalcontent = "<center><p class='modaltext'>" + name + "</p><img id='profilepic' src='" + imageUrl + "'style='max-height:300px; border-radius: 10px'>";
+            var modalcontent = "<center><p style='font-size:26px;'>" + name + "</p><img id='profilepic' src='" + imageUrl + "'style='max-height:300px; border-radius: 10px'>";
             var yourUsername = "";
             var yourPic = "";
             var yourAge = "";
@@ -332,7 +209,7 @@
                 
                 if (users[u].username == name && !updated){
                     
-                    modalcontent = modalcontent + "<p class='modaltext'><a href='profile.html'><button class='edit'>Edit Profile</button></a></center>";
+                    modalcontent = modalcontent + "<p class='modaltext'><a href='profile.html'><button style='border-width: 0px; border-radius: 5px; border-color: whitesmoke;  margin-left: 15px; margin-top; 500px; background-color: green; color: whitesmoke; padding: 10px; text-align: center; font-size: 18px; font-family: monospace;'>Edit Profile</button></a></center>";
                     
                     updated = true;
                     
@@ -369,7 +246,7 @@
                     }
 
                     
-                    modalcontent = modalcontent + "<center><p class='modaltext'>Username: " + yourUsername + "<br>Age: " + yourAge + "<br></p></center>";
+                    modalcontent = modalcontent + "<center><p style='font-size:18px;'>Username: " + yourUsername + "<br>Age: " + yourAge + "<br></p></center>";
                     photodiv.innerHTML = modalcontent;
                     
                 }
@@ -377,86 +254,7 @@
             }
             
         }
-        
-        /*function updateModal(data, usersId){
-            users = data[1];
-            data = data[0];
-            photodiv = document.getElementById("modalphoto");
-            var modalcontent = "<center><p class='modaltext'>" + name + "</p><img id='profilepic' src='" + imageUrl + "'style='max-height:300px; border-radius: 10px'><p class='modaltext'></p></center>";
-            var yourUsername = "";
-            var yourPic = "";
-            var yourAge = "";
-            var yourBio = "";
-            var yourEmail = "";
-            var yourName = "";
-            var yourFav = "";
-            var yourRecent = "";
-            
-            alert(name);
-            
-            var updated = false;
-            
-            for (var u in data) {
-                
-                if (users[u].username = name && !updated){
-                    
-                    updated = true;
-                    
-                    if (users[u].newName != null) {
-                        yourUsername = users[u].newName;
-                    } 
-                    else {
-                        yourUsername = users[u].username;
-                    }
 
-                    if (users[u].newPic != null) {
-                        yourPic = users[u].newPic;
-                    }
-                    else {
-                        yourPic = users[u].profile_picture;
-                    }
-
-                    if (users[u].email != null) {
-                        yourEmail = users[u].email;
-                    }
-
-                    if (users[u].bio != null) {
-                        yourBio = users[u].bio;
-                    }
-                    else{
-                        yourBio = "N/A"
-                    }
-
-                    if (users[u].age != null) {
-                        yourAge = users[u].age;
-                    }
-                    else{
-                        yourAge = "N/A"
-                    }
-
-                    if (users[u].book != null) {
-                        yourFav = users[u].book;
-                    }
-                    else{
-                        yourFav = "N/A"
-                    }
-
-                    if (users[u].recent != null) {
-                        yourRecent = users[u].recent;
-                    }
-                    else{
-                        yourRecent = "N/A"
-                    }
-                    
-                    modalcontent = modalcontent + "<center><p class='modaltext'>Username: " + yourUsername + "<br>Bio: " + yourBio + "<br>Age: " + yourAge + "<br>Favourite Book: " + yourFav + "<br>Most Recent Read: " + yourRecent + "</p></center>";
-                    photodiv.innerHTML = modalcontent;
-                    
-                }
-                
-            }
-            
-        }*/
-        
         function searchFunction() {
           // Declare variables 
           var input, filter, table, tr, td, i, txtValue;
@@ -529,10 +327,7 @@
     
     
     <body>
-        
-        <!--<a href="index.html"><button class="btnat" style="margin-left: 6%; width: 28%">Home</button></a>
-        <a href="explore.html"><button class="btn" style="width: 28%">Explore</button></a>
-        <a href=""><button class="btn" style="margin-right: 6%; width: 28%">Profile</button></a>-->
+   
         
         <div class="navbar">
           <a class="accountbutton" href="index.html">Home</a>
@@ -568,39 +363,28 @@
         </div>
         
         <br> 
+                    
         
-        <input style="border-radius:10px" type="text" id="myInput" onkeyup="searchFunction()" placeholder="Search for names..">
-        <!--<i class="fas fa-arrow-circle-up" style="float: right; font-size: 35; margin-top: 5px;"></i>-->
-        
-        <br>
-        
-        <div id="myModal" class="modal">
+        <div id="contentBox" style="margin:0px auto; width:90%; font-family: monospace; color: whitesmoke;">
+            <div id="column1" style="float:left; margin:0; width:50%;">
+                <input style="border-radius:8px; height: 30px; width: 200px; margin-left: 75px;" type="text" id="myInput" onkeyup="searchFunction()" placeholder="Search for names.."> 
+                <p style="font-size: 26px;">Here are all our Tutors and Customers!</p>
+                <div id="myusers">
+                    <center> 
+                    </center> 
+                </div>
+            </div>
 
-          <!-- Modal content -->
-          <div class="modal-content">
-            <span class="closes" onclick="closeModal()">&times;</span>
-            <div id="modalphoto"></div>
-          </div>
-
-        </div>
-        
-        <center><h1 style="font-family: 'Monospace'; color: blue;">Crystal Users</h1></center>
-        
-        <br>
-    
-        <div id="myusers">
-        
-            <center>
-                <div class='loader'></div>
+            <div id="column2" style="float:left; margin:0;width:50%;">
                 <br>
-                <h3>Loading Users...</h3>
-            </center>
-            
+                <div class="fixed">
+                    <span class="closes" onclick="closeModal()">&times;</span>
+                    <div id="modalphoto"></div>
+                </div>
+            </div>
+
         </div>
-        
-        
-        
-        
+    
     </body>
 
     

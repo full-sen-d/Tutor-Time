@@ -4,13 +4,35 @@
     <script src="https://www.gstatic.com/firebasejs/5.7.3/firebase.js"></script>
     <script src="https://apis.google.com/js/platform.js" async defer></script>
     
-    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
-    
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+    <style> 
+            .upload-button {
+          position: relative;
+          display: inline-block;
+        }
+
+        .upload-button-cover {
+          border-width: 0px; 
+          background-color: green;
+          color: whitesmoke;
+          padding: 10px;
+          border-radius: 5px;
+          font-size: 18px;
+          font-family: monospace;
+          margin-left: 20px;
+        }
+
+        .upload-button input[type=file] {
+          font-size: 100px;
+          position: absolute;
+          left: 0;
+          top: 0;
+          opacity: 0;
+        }
+    </style>
     <script>
         
-        // Initialize Firebase
        var config = {
     apiKey: "AIzaSyC33WzynRyMPuF6QZONZ1mrIaYH_vvZn0c",
     authDomain: "tutortime-6b012.firebaseapp.com",
@@ -21,7 +43,7 @@
   };
   firebase.initializeApp(config);
                 
-        // Check to see if you are logged in
+
         firebase.auth().onAuthStateChanged(function(user) {
             if (user == null) {
                 alert("Not logged in.");
@@ -32,30 +54,10 @@
                 imageUrl = user.photoURL;
                 email = user.email;
                     
-                // write user data to users
                 writeUserData(userId, name, email, imageUrl);
-                
-                // write data to document
-                //mydiv = document.getElementById("mydata");
-                //mydiv.innerHTML = name;
-                
-                //myphotodiv = document.getElementById("invis");
-                //myphotodiv.style.visibility="visible";
-                // write user data to users
-                
+        
                 showProf();
-                
-                /*userprof = document.getElementById("prof");
-                var p = "<center><img height='20%' src='" + imageUrl + "'><br><h2>Username: " + name + "</h2></center>";
-                userprof.innerHTML = p;
-                
-                colL = document.getElementById("left");
-                var l = "<h3 style='margin-left: 30px;'>Email: " + user.email + "</h3><h3 style='margin-left: 30px;'>Email: " + user.email + "</h3>";
-                colL.innerHTML = l;
-                
-                colR = document.getElementById("right");
-                var r = "<h3 style='margin-left: 30px;'>Email: " + user.email + "</h3>";
-                colR.innerHTML = r;*/
+
 
                 firebase.database().ref('/users').once('value').then(function(snapshot) {
                     var data = (snapshot.val());
@@ -67,16 +69,13 @@
                         if (userdata != null) {
                            dataarray = [data,userdata]
                            console.log(dataarray)
-                           //updatetweets(dataarray); 
-                           //showUsers(dataarray);
                             updateModal(dataarray);
                         }
-                      //console.log(data)
-                      //updatetweets(data);
+
                     }
                 });
-            } // end user null check
-        }); // end check auth state
+            }
+        }); 
         
         function encodeImageFileAsURL() {
 
@@ -85,20 +84,16 @@
                 var fileToLoad = filesSelected[0];
                 var fileReader = new FileReader();
                 fileReader.onload = function(fileLoadedEvent) {
-                    var srcData = fileLoadedEvent.target.result; // <--- data: base64
-                    //var newImage = document.createElement('img');
-                    //newImage.src = srcData;
-                    //document.getElementById("imgTest").innerHTML = newImage.outerHTML;
+                    var srcData = fileLoadedEvent.target.result; 
+
                     document.getElementById("chosenImg").innerHTML = srcData;
-                    //document.getElementById("chosenImg").style.display = "block";
-                    //console.log("Converted Base64 version is: " + document.getElementById("imgTest").innerHTML);
-                    //console.log(srcData);
+
                 }
                 fileReader.readAsDataURL(fileToLoad);
             }
-        } // end function
+        } 
         
-        // write user data
+      
         function writeUserData(userId, name, email, imageUrl) {
             firebase.database().ref('users/' + userId).update({
                 email: email,
@@ -115,8 +110,6 @@
             var yourBio = "";
             var yourEmail = "";
             var yourName = "";
-            var yourFav = "";
-            var yourRecent = "";
             
             firebase.database().ref('/users').once('value').then(function(snapshot) { 
                 var userdata = (snapshot.val());
@@ -156,11 +149,11 @@
                             } 
                             
                             userprof = document.getElementById("prof");
-                            var p = "<center><img style='border-radius: 12px; margin-top: 20px;' src='" + yourPic + "'><br><p style='font-family: monospace; font-size:30px;' > " + yourName + "</p></center>";
+                            var p = "<center><img style='border-radius: 12px; margin-top: 20px;' src='" + yourPic + "'><br><p style='font-family: monospace; font-size:36px; color: whitesmoke;'> " + yourName + "</p></center>";
                             userprof.innerHTML = p;
                             
                             lprof = document.getElementById("left");
-                            var l = "<center><h3 style='margin-left: 10px;'>Email: " + yourEmail + "</h3><h3 style='margin-left: 10px;'>Age: " + yourAge + "</h3><h3 style='margin-left: 10px;'>Bio: " + yourBio + "</h3></center>";
+                            var l = "<center><p style='margin-left: 10px; font-size: 18px; color: white;'>Email: " + yourEmail + "</p><p style='margin-left: 10px; font-size: 18px; color: white;'>Age: " + yourAge + "</p><p style='margin-left: 10px; font-size:18px; color: white;'>Bio: " + yourBio + "</p></center>";
                             lprof.innerHTML = l;
                         }
                     } 
@@ -170,7 +163,6 @@
         
         function chgBio() {
             var newBio = document.getElementById("newbio").value;
-            //alert(document.getElementById("newbio").value);
             if (newBio.length > 30) {
                 alert("Your bio cannot be longer than 30 characters");
             } 
@@ -193,7 +185,6 @@
         
         function chgAge() {
             var newage = document.getElementById("newage").value;
-            //alert(document.getElementById("newage").value);
             if (newage.length > 30) {
                 alert("Your bio cannot be longer than 30 characters");
             } 
@@ -332,10 +323,6 @@
 
     <body>
         
-        <!--<a href="index.html"><button class="btnat" style="margin-left: 6%; width: 28%">Home</button></a>
-        <a href="explore.html"><button class="btn" style="width: 28%">Explore</button></a>
-        <a href=""><button class="btn" style="margin-right: 6%; width: 28%">Profile</button></a>-->
-        
         
          <div class="navbar">
   <a class="accountbutton" href="index.html">Home</a>
@@ -346,7 +333,7 @@
     <div class="dropdown-content">
         <a class="accountbutton" onclick="signin()">Sign in</a>
         <a class="accountbutton" onclick="signout()">Sign out</a>
-        <a href="profile.html"> Profile </a>
+        <a href="users.html"> Our Users </a>
     </div>
   </div> 
   <div class="dropdown">
@@ -372,44 +359,47 @@
 
             
         
-        <div id="myModal" class="modal">
+        <div id="myModal">
 
                   <!-- Modal content -->
 
-                </div>
+        </div>
         <div id="prof"></div>
-        <div class="row">
+        <div class="row" style="font-family: monospace;">
           <div id="left"></div>
         </div>
-        
+        <br> 
         <br>
+        <br>
+        <center> 
+        <div id="changeprof" style="color: whitesmoke; font-family: monospace;">
         
-        <div id="changeprof">
-        
-            <h2>Edit Profile:</h2>
-            <br><br>
+            <p style="font-size: 36px;">Edit Profile:</p>
             
-            <h4>New Biography:</h4>
+            <p style="font-size: 18px;"> New Biography:</p>
             <input type="text" id="newbio" placeholder="Enter New Bio..">
-            <button onclick="chgBio()" class="newprofbtn">Submit</button>
+            <button style="border-width: 0px; border-radius: 5px; border-color: whitesmoke;  margin-left: 15px; margin-top; 500px; background-color: green; color: whitesmoke; padding: 10px; text-align: center; font-size: 18px; font-family: monospace;" onclick="chgBio()" class="newprofbtn">Submit</button>
             
             <br><br>
             
-            <h4>New Age:</h4>
+            <p style="font-size: 18px;">New Age:</p>
             <input type="text" id="newage" placeholder="Enter New Age..">
-            <button onclick="chgAge()" class="newprofbtn">Submit</button>
+            <button style="border-width: 0px; border-radius: 5px; border-color: whitesmoke;  margin-left: 15px; margin-top; 500px; background-color: green; color: whitesmoke; padding: 10px; text-align: center; font-size: 18px; font-family: monospace;" onclick="chgAge()" class="newprofbtn">Submit</button>
             
             <br><br>
             
-            <h4>New Profile Image:</h4>
-            <input id="inputFileToLoad" type="file" onchange="encodeImageFileAsURL();" />
-            <button onclick="chgPic()" class="newprofbtn">Submit</button>
+            <p style="font-size: 18px;">New Profile Image:</p>
+            <div class="upload-button">
+                <button class="upload-button-cover">Upload a file</button>
+                <input id="inputFileToLoad" type="file" onchange="encodeImageFileAsURL();" />
+            </div>
+            <button style="border-width: 0px; border-radius: 5px; border-color: whitesmoke;  margin-left: 15px; margin-top; 500px; background-color: green; color: whitesmoke; padding: 10px; text-align: center; font-size: 18px; font-family: monospace;" onclick="chgPic()" >Submit</button>
             <div id="chosenImg" style="display:none;"></div>
             
             <br><br>
         
         </div>
-        
+        </center>
     
         
         

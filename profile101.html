@@ -1,0 +1,170 @@
+<html>
+
+<link rel="stylesheet" href="css.css" >
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" >
+
+<body> 
+   
+    <script src="https://www.gstatic.com/firebasejs/5.10.0/firebase.js"></script>
+    <script src="https://apis.google.com/js/platform.js" async defer></script>
+    
+<script>
+    
+    var config = {
+                apiKey: "AIzaSyC33WzynRyMPuF6QZONZ1mrIaYH_vvZn0c",
+                authDomain: "tutortime-6b012.firebaseapp.com",
+                databaseURL: "https://tutortime-6b012.firebaseio.com",
+                projectId: "tutortime-6b012",
+                storageBucket: "tutortime-6b012.appspot.com",
+                messagingSenderId: "8696144559"
+          };
+        firebase.initializeApp(config);
+
+    firebase.auth().onAuthStateChanged(function(user) {
+            if (user == null) {
+                document.getElementById("uid").innerHTML = "Please log in";
+                document.getElementById("uphoto").innerHTML = "N/A";
+                document.getElementById("umail").innerHTML = "N/A";
+                return;
+            } else {
+                userId = user.displayName; // you can also get .displayName, .photoURL, .email
+                document.getElementById("uid").innerHTML = userId; // display Google uid on page
+                userPhoto = user.photoURL; // you can also get .displayName, .photoURL, .email
+                document.getElementById("uphoto").src = userPhoto; // display Google uid on page
+                userMail = user.email; // you can also get .displayName, .photoURL, .email
+                document.getElementById("umail").innerHTML = userMail; // display Google uid on page
+                
+            } // end user null check
+        }); // end check auth state
+    
+    function signin() {
+            var provider = new firebase.auth.GoogleAuthProvider();
+            firebase.auth().signInWithRedirect(provider).then(function(result) { 
+                window.location.replace("fbtest.html");
+                });
+        } 
+                                
+    function showProf() {   
+            var yourAge = "";
+        
+        firebase.database().ref('/users').once('value').then(function(snapshot) { 
+                var userdata = (snapshot.val());
+                    dataarray = [userdata]
+                    console.log(dataarray);
+                    users = dataarray[0];
+            
+                    var yourName;
+                    var yourAge;
+                
+                    for (var u in users) {
+                        if (users[u].userId == userId) {
+                            
+                            yourName = users[u].username;
+                            
+                            if (users[u].age != null) {
+                                yourAge = users[u].age;
+                            }
+                            else{
+                                yourAge = "N/A"
+                            }
+                            
+                            lprof = document.getElementById("prof");
+                            var l = "<h3 style='margin-left: 30px;'>Email: " + yourName + "</h3><h3 style='margin-left: 30px;'>Bio: " + yourAge + "</h3>";
+                            lprof.innerHTML = l; 
+                        }
+                    }
+            });
+        }
+    
+    function chgAge() {
+            var newage = document.getElementById("newage").value;
+            //alert(document.getElementById("newage").value);
+            if (newage.length > 30) {
+                alert("Your bio cannot be longer than 30 characters");
+            } 
+            else {
+                firebase.database().ref('users/' + userId).update({
+                    age: newage
+                });
+                alert("Successfully Updated Age"); 
+            }
+            showProf();
+        }
+    
+    function updateModal(data){
+            var yourAge= "";
+            var updated = false;
+            
+            for (var u in data) {
+                
+                if (users[u].userId = userId && !updated){
+                    
+                    updated = true;
+                    if (users[u].age != null) {
+                        yourAge = users[u].age;
+                    }
+                    else{
+                        yourAge = "N/A"
+                    }
+                    
+                    modalcontent = modalcontent + "<center><p class='modaltext'>Username: " + yourUsername + "<br>Bio: " + yourBio + "<br>Age: " + yourAge + "<br>Favourite Book: " + yourFav + "<br>Most Recent Read: " + yourRecent + "</p></center>";
+                    photodiv.innerHTML = modalcontent;
+                    
+                }
+                
+            }
+            
+        }
+                                
+    </script>
+    
+    <div class="navbar">
+  <a class="accountbutton" href="index.html">Home</a>
+  <div class="dropdown">
+    <button class="dropbtn">Account 
+      <i class="fa fa-caret-down"></i>
+    </button>
+    <div class="dropdown-content">
+        <a class="accountbutton" onclick="signin()">Sign in</a>
+        <a class="accountbutton" onclick="signout()">Sign out</a>
+        <a href="profile.html"> Profile </a>
+    </div>
+  </div> 
+  <div class="dropdown">
+    <button class="dropbtn">Subjects 
+      <i class="fa fa-caret-down"></i>
+    </button>
+    <div class="dropdown-content">
+        <a href="English.html">English</a>
+        <a href="French.html">French</a>
+        <a href="Latin.html">Latin</a>
+        <a href="Mandarin.html">Mandarin</a>
+        <a href="Spanish.html">Spanish</a>
+        <a href="History.html">History</a> 
+        <a href="Geography.html">Geography</a>
+        <a href="General_Science.html">General Science</a>
+        <a href="Chemistry.html">Chemistry</a>
+        <a href="Physics.html">Physics</a>
+        <a href="Computer_Science.html">Computer Science</a>
+        <a href="Math.html">Math</a>
+    </div>
+  </div> 
+</div>
+    
+<p class="accountNameText" id="uid"></p>    
+
+<img id="uphoto" class="accountImg">
+    
+<p class="accountMailText" id="umail"></p>
+    
+    <div id="prof">
+            
+        </div>
+    
+<div id="changeprof">
+
+            <h4>New Age:</h4>
+            <input type="text" id="newage" placeholder="Enter New Age..">
+            <button onclick="chgAge()" class="newprofbtn">Submit</button>
+</div>
+    

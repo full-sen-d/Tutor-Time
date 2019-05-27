@@ -1,0 +1,609 @@
+
+<html>
+    <link rel="stylesheet" href="css.css" >
+    <script src="https://www.gstatic.com/firebasejs/5.7.3/firebase.js"></script>
+    <script src="https://apis.google.com/js/platform.js" async defer></script>
+    
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
+ 
+    <script>
+        
+        //var friendToAdd = "";
+        
+        // Initialize Firebase
+        var config = {
+    apiKey: "AIzaSyC33WzynRyMPuF6QZONZ1mrIaYH_vvZn0c",
+    authDomain: "tutortime-6b012.firebaseapp.com",
+    databaseURL: "https://tutortime-6b012.firebaseio.com",
+    projectId: "tutortime-6b012",
+    storageBucket: "tutortime-6b012.appspot.com",
+    messagingSenderId: "8696144559"
+  };
+  firebase.initializeApp(config);
+                
+        // Check to see if you are logged in
+        firebase.auth().onAuthStateChanged(function(user) {
+            if (user == null) {
+                alert("Not logged in.");
+                return;
+            } else {
+                userId = user.uid;
+                name = user.displayName;
+                imageUrl = user.photoURL;
+                email = user.email;
+                    
+                // write user data to users
+                writeUserData(userId, name, email, imageUrl);
+                
+                // write data to document
+                //mydiv = document.getElementById("mydata");
+                //mydiv.innerHTML = name;
+                
+                //myphotodiv = document.getElementById("invis");
+                //myphotodiv.style.visibility="visible";
+                // write user data to users
+
+                firebase.database().ref('/users').once('value').then(function(snapshot) {
+                    var data = (snapshot.val());
+                    if (data == null) {
+                      console.log("No data found at /users/" + userId);  
+                    } else {
+                        
+                        var userdata = (snapshot.val());
+                        if (userdata != null) {
+                           dataarray = [data,userdata]
+                           console.log(dataarray)
+                           //updatetweets(dataarray); 
+                            showUsers(dataarray, userId);
+                            updateModal(dataarray);
+                        }
+                      //console.log(data)
+                      //updatetweets(data);
+                    }
+                });
+            } // end user null check
+        }); // end check auth state
+        
+        
+        
+        function encodeImageFileAsURL() {
+
+            var filesSelected = document.getElementById("inputFileToLoad").files;
+            if (filesSelected.length > 0) {
+                var fileToLoad = filesSelected[0];
+                var fileReader = new FileReader();
+                fileReader.onload = function(fileLoadedEvent) {
+                    var srcData = fileLoadedEvent.target.result; // <--- data: base64
+                    //var newImage = document.createElement('img');
+                    //newImage.src = srcData;
+                    //document.getElementById("imgTest").innerHTML = newImage.outerHTML;
+                    //document.getElementById("imgTest").innerHTML = srcData;
+                    //console.log("Converted Base64 version is: " + document.getElementById("imgTest").innerHTML);
+                    //console.log(srcData);
+                }
+                fileReader.readAsDataURL(fileToLoad);
+            }
+        } // end function
+        
+        // write user data
+        function writeUserData(userId, name, email, imageUrl) {
+            firebase.database().ref('users/' + userId).update({
+                username: name,
+                email: email,
+                profile_picture : imageUrl,
+                userId: userId
+            });
+        }
+        
+        async function showUsers(data, uID) {
+            //var mylist = "<ul>";
+            var mytab = "<table id='myTable'><tr class='header'><th>Profile Pic</th><th>Username</th><th>Email</th><tr>";
+            users = data[1]; // put on top, because changed data - not good coding change later
+            data = data[0];
+            var c = 0;
+            var isFriend;
+            //alert(uID);
+            
+            for (var u in users) {
+                c = c+1;
+                mytab = mytab + "<tr>";
+                
+                var uAge, uRecent, uFavorite, uPoints, uBio;
+                if (users[u].age==null){
+                    firebase.database().ref('users/' + users[u].userId + "/").update({age: "N/A"});
+                    uAge = "N/A";
+                }
+                else{
+                    uAge = users[u].age;
+                }
+                if (users[u].bio==null){
+                    firebase.database().ref('users/' + users[u].userId + "/").update({bio: "N/A"});
+                    uBio = "N/A";
+                }
+                else{
+                    uBio = users[u].bio;
+                }
+                if (users[u].recent==null){
+                    firebase.database().ref('users/' + users[u].userId + "/").update({recent: "N/A"});
+                    uRecent = "N/A";
+                }
+                else{
+                    uRecent = users[u].recent;
+                }
+                if (users[u].book==null){
+                    firebase.database().ref('users/' + users[u].userId + "/").update({book: "N/A"});
+                    uFavorite = "N/A";
+                }
+                else{
+                    uFavorite = users[u].book;
+                }
+                if (users[u].points==null){
+                    firebase.database().ref('users/' + users[u].userId + "/").update({points: 0});
+                    uPoints = 0;
+                }
+                else{
+                    uPoints = users[u].points;
+                }
+                
+                var display;
+                if (users[u].newName!=null){
+                    display = users[u].newName;
+                }
+                else{
+                    display = users[u].username;
+                }
+                mytab = mytab + "<td><center><img class='avatar' onclick='openUser(`" + display + "`,`" + users[u].email + "`,`" + users[u].profile_picture + "`,`" + uAge + "`,`" + "`)' src='" + users[u].profile_picture + "' width='60px'></center></td>";
+                
+                mytab = mytab + "<td>" + display + "</td>";
+                mytab = mytab + "<td>" + users[u].email + "</td>";
+                
+                //alert(users[u].username);
+                
+                    
+                mytab = mytab + "</tr>";
+            }
+            //mylist = mylist + "</ul>";
+            mytab = mytab + "</table>"
+            var mytdiv = document.getElementById("myusers");
+            //mytdiv.innerHTML = mylist;
+            mytdiv.innerHTML = mytab;
+        }
+        
+        function checkUser(usersId, uID){
+            
+            //alert(usersId);
+            
+            var isFriend = false;
+            
+            return new Promise(function(resolve, reject) {
+                firebase.database().ref('/users/' + uID + '/friends').once('value').then(function(snapshot) { 
+                    var userdata = (snapshot.val());
+                    dataarray = [userdata];
+                    console.log(dataarray);
+
+                    users2 = userdata;
+
+                    for (var x in users2) {
+                        //alert(users2[x].userId + " = " + usersId);
+                        if (users2[x].uName == usersId || usersId == name) {
+                            isFriend = true;
+                            //alert(users2[x].userId);
+                        }
+                    }
+
+                    resolve(isFriend);
+
+                });
+                
+            });
+        }
+        
+        function addFriend(userCount){
+            //firebase.database().ref('users/' + userId + "/friends").push({uName: userName});
+            alert(userCount);
+            var added = document.getElementById("add" + userCount);
+            added.src = "check.png";
+            added.onclick = "";
+            added.style.filter = "brightness(1)";
+            
+            firebase.database().ref('/users').once('value').then(function(snapshot) {
+                var data = (snapshot.val());
+                if (data == null) {
+                  console.log("No data found at /users/" + userId);  
+                } else {
+
+                    var userdata = (snapshot.val());
+                    if (userdata != null) {
+                       dataarray = [data,userdata]
+                       console.log(dataarray)
+                       users1 = dataarray[1];
+                        var count = 0;
+                       for (var u in users1){
+                           count = count+1;
+                           if (count == userCount){
+                               //alert("yes");
+                               //alert(count);
+                                //alert(display1);
+                                //alert(users1[u].userId);
+                                firebase.database().ref('users/' + userId + "/friends/").push({uName: users1[u].username, userId: users1[u].userId});
+                           }
+                       }
+                    }
+                }
+            });
+            
+        }
+        
+        // write tweets to firebase
+        /*function tweet() {
+            
+            var twitdoc = document.getElementById("twit");
+            var twitimg = document.getElementById("imgTest");
+            var nameValue = twitdoc.value;
+            var imgValue = twitimg.innerHTML;
+            var js_time = Date.now();
+            
+            var tweetid = firebase.database().ref('tweets/' + userId + "/").push({tweet: nameValue, time: js_time, img: imgValue});
+            twitdoc.value = "";
+            console.log("tweet written")
+            
+            firebase.database().ref('/tweets').once('value').then(function(snapshot) {
+                    var data = (snapshot.val());
+                    if (data == null) {
+                      console.log("No data found at /tweets/" + userId);  
+                    } else { 
+                        firebase.database().ref('/users').once('value').then(function(snapshot) { 
+                        var userdata = (snapshot.val());
+                        if (userdata != null) {
+                           dataarray = [data,userdata]
+                           console.log(dataarray)
+                           updatetweets(dataarray); 
+                        }
+                      });
+                    }
+                });
+            
+            
+            
+            // The unique key stored in tweetid is based on a timestamp, so list items will automatically be ordered chronologically. Because Firebase generates a unique key for each tweet, no write conflicts will occur if multiple users add a post at the same time. https://firebase.google.com/docs/database/admin/save-data
+            
+        }*/
+        
+        function signin() {
+            console.log("Signing in");
+            var provider = new firebase.auth.GoogleAuthProvider();
+            firebase.auth().signInWithRedirect(provider).then(function(result) { 
+                window.location.replace("fbtest.html");
+            });
+        }
+        
+        function signout() {
+            console.log("Signing out");
+            firebase.auth().signOut().then(function() {
+            });
+        }
+        
+        function openProfile(){
+            closebtn = document.getElementById("closebtn");
+            closebtn.innerHTML = "<button onclick='closeProfile()'>---</button>";
+            tweets = document.getElementById("mytweets");
+            tweets.style.display = "block";
+        }
+        
+        function closeProfile(){
+            closebtn = document.getElementById("closebtn");
+            closebtn.innerHTML = "<button onclick='openProfile()'>+++</button>";
+            tweets = document.getElementById("mytweets");
+            tweets.style.display = "none";
+        }
+        
+        function showPic(){
+            pic = document.getElementById("profilepic");
+            
+        }
+
+        function makeCyan(str){
+            var k = document.getElementById(str);
+            str.style.color = "cyan";
+        }
+        
+        function makeWhite(str){
+            var k = document.getElementById(str);
+            str.style.color = "white";
+        }
+        
+        function updateModal(data){
+            users = data[1];
+            data = data[0];
+            photodiv = document.getElementById("modalphoto");
+            var modalcontent = "<center><p class='modaltext'>" + name + "</p><img id='profilepic' src='" + imageUrl + "'style='max-height:300px; border-radius: 10px'>";
+            var yourUsername = "";
+            var yourPic = "";
+            var yourAge = "";
+            var yourBio = "";
+            var yourEmail = "";
+            var yourName = "";
+            var yourFav = "";
+            var yourRecent = "";
+            
+            var updated = false;
+            
+            for (var u in data) {
+                
+                if (users[u].username == name && !updated){
+                    
+                    modalcontent = modalcontent + "<p class='modaltext'><a href='profile.html'><button class='edit'>Edit Profile</button></a></center>";
+                    
+                    updated = true;
+                    
+                    if (users[u].newName != null) {
+                        yourUsername = users[u].newName;
+                    } 
+                    else {
+                        yourUsername = users[u].username;
+                    }
+
+                    if (users[u].newPic != null) {
+                        yourPic = users[u].newPic;
+                    }
+                    else {
+                        yourPic = users[u].profile_picture;
+                    }
+
+                    if (users[u].email != null) {
+                        yourEmail = users[u].email;
+                    }
+
+                    if (users[u].bio != null) {
+                        yourBio = users[u].bio;
+                    }
+                    else{
+                        yourBio = "N/A"
+                    }
+
+                    if (users[u].age != null) {
+                        yourAge = users[u].age;
+                    }
+                    else{
+                        yourAge = "N/A"
+                    }
+
+                    
+                    modalcontent = modalcontent + "<center><p class='modaltext'>Username: " + yourUsername + "<br>Age: " + yourAge + "<br></p></center>";
+                    photodiv.innerHTML = modalcontent;
+                    
+                }
+                
+            }
+            
+        }
+        
+        /*function updateModal(data, usersId){
+            users = data[1];
+            data = data[0];
+            photodiv = document.getElementById("modalphoto");
+            var modalcontent = "<center><p class='modaltext'>" + name + "</p><img id='profilepic' src='" + imageUrl + "'style='max-height:300px; border-radius: 10px'><p class='modaltext'></p></center>";
+            var yourUsername = "";
+            var yourPic = "";
+            var yourAge = "";
+            var yourBio = "";
+            var yourEmail = "";
+            var yourName = "";
+            var yourFav = "";
+            var yourRecent = "";
+            
+            alert(name);
+            
+            var updated = false;
+            
+            for (var u in data) {
+                
+                if (users[u].username = name && !updated){
+                    
+                    updated = true;
+                    
+                    if (users[u].newName != null) {
+                        yourUsername = users[u].newName;
+                    } 
+                    else {
+                        yourUsername = users[u].username;
+                    }
+
+                    if (users[u].newPic != null) {
+                        yourPic = users[u].newPic;
+                    }
+                    else {
+                        yourPic = users[u].profile_picture;
+                    }
+
+                    if (users[u].email != null) {
+                        yourEmail = users[u].email;
+                    }
+
+                    if (users[u].bio != null) {
+                        yourBio = users[u].bio;
+                    }
+                    else{
+                        yourBio = "N/A"
+                    }
+
+                    if (users[u].age != null) {
+                        yourAge = users[u].age;
+                    }
+                    else{
+                        yourAge = "N/A"
+                    }
+
+                    if (users[u].book != null) {
+                        yourFav = users[u].book;
+                    }
+                    else{
+                        yourFav = "N/A"
+                    }
+
+                    if (users[u].recent != null) {
+                        yourRecent = users[u].recent;
+                    }
+                    else{
+                        yourRecent = "N/A"
+                    }
+                    
+                    modalcontent = modalcontent + "<center><p class='modaltext'>Username: " + yourUsername + "<br>Bio: " + yourBio + "<br>Age: " + yourAge + "<br>Favourite Book: " + yourFav + "<br>Most Recent Read: " + yourRecent + "</p></center>";
+                    photodiv.innerHTML = modalcontent;
+                    
+                }
+                
+            }
+            
+        }*/
+        
+        function searchFunction() {
+          // Declare variables 
+          var input, filter, table, tr, td, i, txtValue;
+          input = document.getElementById("myInput");
+          filter = input.value.toUpperCase();
+          table = document.getElementById("myTable");
+          tr = table.getElementsByTagName("tr");
+
+          // Loop through all table rows, and hide those who don't match the search query
+          for (i = 1; i < tr.length; i++) {
+            var shown = false;
+            td = tr[i].getElementsByTagName("td")[1];
+            tf = tr[i].getElementsByTagName("td")[2];
+            if (td) {
+              txtValue = td.textContent || td.innerText;
+              if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                tr[i].style.display = "";
+                shown = true;
+              } else {
+                tr[i].style.display = "none";
+              }
+            }
+              
+            if (tf) {
+              txtValue = tf.textContent || tf.innerText;
+              if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                tr[i].style.display = "";
+                shown = true;
+              } else {
+                tr[i].style.display = "none";
+              }
+            }
+            
+            if (!shown){
+                tr[i].style.display = "none";
+            }
+            else{
+                tr[i].style.display = "";
+            }
+              
+          }
+        }
+        
+        function openModal(){
+            var modal = document.getElementById('myModal');
+            modal.style.display = "block";
+        }
+        
+        function closeModal(){
+            var modal = document.getElementById('myModal');
+            modal.style.display = "none";
+            photodiv = document.getElementById("modalphoto");
+        }
+        
+        function openUser(uName, uEmail, uPic, uBio, uAge){
+            var modal = document.getElementById('profModal');
+            modal.style.display = "block";
+            contentdiv = document.getElementById("profcontent");
+            var modalcontent = "<center><img src='" + uPic + "' style='max-height:200px; border-radius:10px'><div style='text-align:left; margin-left:40%'><br><h3>Name: " + uName + "<br><br>Email: " + uEmail + "<br><br>Age: " + uAge + "<br><br></div></center>";
+            contentdiv.innerHTML = modalcontent;
+        }
+        
+        function closeprofModal(){
+            var modal = document.getElementById('profModal');
+            modal.style.display = "none";
+        }
+        
+    </script>
+
+    
+    
+    <body>
+        
+        <!--<a href="index.html"><button class="btnat" style="margin-left: 6%; width: 28%">Home</button></a>
+        <a href="explore.html"><button class="btn" style="width: 28%">Explore</button></a>
+        <a href=""><button class="btn" style="margin-right: 6%; width: 28%">Profile</button></a>-->
+        
+        <div class="navbar">
+          <a class="accountbutton" href="index.html">Home</a>
+          <div class="dropdown">
+            <button class="dropbtn">Account 
+              <i class="fa fa-caret-down"></i>
+            </button>
+            <div class="dropdown-content">
+                <a class="accountbutton" onclick="signin()">Sign in</a>
+                <a class="accountbutton" onclick="signout()">Sign out</a>
+                <a href="profile.html"> Profile </a>
+            </div>
+          </div> 
+          <div class="dropdown">
+            <button class="dropbtn">Subjects 
+              <i class="fa fa-caret-down"></i>
+            </button>
+            <div class="dropdown-content">
+                <a href="English.html">English</a>
+                <a href="French.html">French</a>
+                <a href="Latin.html">Latin</a>
+                <a href="Mandarin.html">Mandarin</a>
+                <a href="Spanish.html">Spanish</a>
+                <a href="History.html">History</a> 
+                <a href="Geography.html">Geography</a>
+                <a href="General_Science.html">General Science</a>
+                <a href="Chemistry.html">Chemistry</a>
+                <a href="Physics.html">Physics</a>
+                <a href="Computer_Science.html">Computer Science</a>
+                <a href="Math.html">Math</a>
+            </div>
+          </div> 
+        </div>
+        
+        <br> 
+        
+        <input style="border-radius:10px" type="text" id="myInput" onkeyup="searchFunction()" placeholder="Search for names..">
+        <!--<i class="fas fa-arrow-circle-up" style="float: right; font-size: 35; margin-top: 5px;"></i>-->
+        
+        <br>
+        
+        <div id="myModal" class="modal">
+
+          <!-- Modal content -->
+          <div class="modal-content">
+            <span class="closes" onclick="closeModal()">&times;</span>
+            <div id="modalphoto"></div>
+          </div>
+
+        </div>
+        
+        <center><h1 style="font-family: 'Monospace'; color: blue;">Crystal Users</h1></center>
+        
+        <br>
+    
+        <div id="myusers">
+        
+            <center>
+                <div class='loader'></div>
+                <br>
+                <h3>Loading Users...</h3>
+            </center>
+            
+        </div>
+        
+        
+        
+        
+    </body>
+
+    
+
+    
+</html>

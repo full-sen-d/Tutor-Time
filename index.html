@@ -1,5 +1,73 @@
- <link rel="stylesheet" href="LoginPage.css">
+<html>
+<link rel="stylesheet" href="css.css" >
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" >
+
 <body> 
+   
+    <script src="https://www.gstatic.com/firebasejs/5.10.0/firebase.js"></script>
+    <script src="https://apis.google.com/js/platform.js" async defer></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    
+    <script>
+    var config = {
+            apiKey: "AIzaSyC33WzynRyMPuF6QZONZ1mrIaYH_vvZn0c",
+            authDomain: "tutortime-6b012.firebaseapp.com",
+            databaseURL: "https://tutortime-6b012.firebaseio.com",
+            projectId: "tutortime-6b012",
+            storageBucket: "tutortime-6b012.appspot.com",
+            messagingSenderId: "8696144559"
+          };
+        firebase.initializeApp(config);
+                
+        // Check to see if you are logged in
+                
+        function signin() {
+                var provider = new firebase.auth.GoogleAuthProvider();
+                firebase.auth().signInWithRedirect(provider).then(function(result) { 
+                    window.location.replace("fbtest.html");
+                });
+        } 
+    
+        function signout() {
+            console.log("Signing out");
+            firebase.auth().signOut().then(function() {
+            });
+        }
+    </script>
+    
+    <div class="navbar">
+  <a class="accountbutton" href="index.html">Home</a>
+  <div class="dropdown">
+    <button class="dropbtn">Account 
+      <i class="fa fa-caret-down"></i>
+    </button>
+    <div class="dropdown-content">
+        <a class="accountbutton" onclick="signin()">Sign in</a>
+        <a class="accountbutton" onclick="signout()">Sign out</a>
+        <a href="profile.html"> Profile </a>
+    </div>
+  </div> 
+  <div class="dropdown">
+    <button class="dropbtn">Subjects 
+      <i class="fa fa-caret-down"></i>
+    </button>
+    <div class="dropdown-content">
+        <a href="English.html">English</a>
+        <a href="French.html">French</a>
+        <a href="Latin.html">Latin</a>
+        <a href="Mandarin.html">Mandarin</a>
+        <a href="Spanish.html">Spanish</a>
+        <a href="History.html">History</a> 
+        <a href="Geography.html">Geography</a>
+        <a href="General_Science.html">General Science</a>
+        <a href="Chemistry.html">Chemistry</a>
+        <a href="Physics.html">Physics</a>
+        <a href="Computer_Science.html">Computer Science</a>
+        <a href="Math.html">Math</a>
+    </div>
+  </div> 
+</div>
+    
     <div> 
         <h1 class="title-text"> 
             <center>Welcome to Tutor Time! </center> 
@@ -18,4 +86,7 @@
    </div>
    </div>
     
+    
+    
 </body>
+</html>

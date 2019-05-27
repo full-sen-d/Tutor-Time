@@ -1,0 +1,206 @@
+
+body {
+    backface-visibility: visible;
+    background-color: navy;
+}
+
+.login-box{
+    border-style: solid;
+    border-color: green;
+    border-width: thick;
+    text-align: center;
+    background-color: navy;
+    color: whitesmoke;
+    padding: 40px;
+    border-radius: 10px;
+    margin-top: 50px;
+    margin-left:175px;
+    width:960px;
+    height: 150px;
+}
+
+.info-box{
+   border-style: solid;
+    border-color: green;
+    border-width: thick;
+    text-align: center;
+    background-color: navy;
+    color: whitesmoke;
+    padding: 20px;
+    border-radius: 10px;
+    margin-top: 50px;
+    margin-left:175px;
+    width:960px;
+    height: 150px;
+}
+
+.login-button{
+  border-width: 0px;
+  border-radius: 5px;
+  border-color: whitesmoke; 
+  margin-left: 15px;
+  margin-top; 500px;
+  background-color: green;  
+  color: whitesmoke;
+  padding: 10px;
+  text-align: center;
+  font-size: 16px;
+  font-family: monospace;
+}
+
+
+.subject-box{
+    border-style: solid;
+    border-color: green;
+    border-width: thick;
+    text-align: center;
+    background-color: navy;
+    color: whitesmoke;
+    padding: 40px;
+    border-radius: 10px;
+    margin-top: 200px;
+    margin-left:175px;
+    width:960px;
+    height: 100px;
+    font-family: monospace;
+}
+
+}
+
+.text-style {
+    font-size: 20px;
+    font-family: monospace;
+    color: whitesmoke;
+}
+
+.text{
+    font-family: monospace;
+    font-size: 20px;
+    color: whitesmoke; 
+    font-style: normal;
+}
+
+.title-text {
+    font-size: 36px;
+    color: whitesmoke;
+    font-family: monospace;
+    font-style: normal;
+}
+
+.subject-title-text{
+    font-size: 36px;
+    color: whitesmoke;
+    font-family: monospace;
+    font-style: normal;
+    margin-top: 100px;
+}
+
+.navbar {
+  overflow: hidden;
+  background-color: green;
+  border-radius: 5px;
+}
+
+.navbar a {
+  float: left;
+  font-size: 16px;
+  color: whitesmoke;
+  text-align: center;
+  padding: 14px 16px;
+  text-decoration: none;
+}
+
+.navbarbutton{
+  font-family: monospace;
+  font-size: 16px;
+  color: whitesmoke;
+}
+
+.dropdown {
+  float: left;
+  overflow: hidden;
+  font-family: monospace;
+}
+
+.dropdown .dropbtn {
+  font-size: 16px;
+  border: none;
+  outline: none;
+  color: whitesmoke;
+  padding: 14px 16px;
+  background-color: inherit;
+  font-family: inherit;
+  margin: 0;
+}
+
+.navbar a:hover, .dropdown:hover .dropbtn {
+  background-color: navy;
+}
+
+.dropdown-content {
+  display: none;
+  position: absolute;
+  background-color: green;
+  font-family: monospace;
+  min-width: 160px;
+  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+  z-index: 1;
+}
+
+.dropdown-content a {
+  float: none;
+  color: whitesmoke;
+  padding: 12px 16px;
+  text-decoration: none;
+  display: block;
+  text-align: left;
+}
+
+.dropdown-content a:hover {
+  background-color: navy;
+}
+
+.dropdown:hover .dropdown-content {
+  display: block;
+}
+
+.accountbutton {
+  border-width: 0px;
+  border-color: whitesmoke; 
+  background-color: green;  
+  color: whitesmoke;
+  padding: 10px;
+  text-align: center;
+  font-size: 16px;
+  font-family: monospace;
+}
+
+.accountbutton:hover{
+  background-color: navy;
+}
+
+.accountNameText{
+    font-family: monospace;
+    font-size: 50px;
+    color: whitesmoke;
+    margin-left: 515px;
+    margin-top: 25px;
+}
+
+.accountImg{
+    margin-left: 550px;
+}
+
+.accountMailText{
+    font-family: monospace;
+    font-size: 25px;
+    color: whitesmoke;
+    margin-left: 525px;
+    margin-top: 25px;
+}
+
+.fixed
+{
+    position: fixed;
+    top: 20px;
+}

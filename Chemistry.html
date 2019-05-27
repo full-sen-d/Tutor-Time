@@ -116,14 +116,12 @@
                         mytab = mytab + "<td>" + users[u].email + "</td>";
                         mytab = mytab + "<td>" + data[u][t].tweet + "</td>";
                         mytab = mytab + "<td>" + time + "</td>";
-                        
-                        
                     } 
                     mytab = mytab + "</tr>";
                 }   
             }
             //mylist = mylist + "</ul>";
-            mytab = mytab + "</table>"
+            mytab = mytab + "</table>";
             var mytdiv = document.getElementById("mytweets");
             //mytdiv.innerHTML = mylist;
             mytdiv.innerHTML = mytab;
@@ -188,7 +186,7 @@
         <button class="login-button" onclick="signout()">Sign out</button>
         <br>
         <form>
-            <p class="text-style">Tweet:</p>
+            <p class="text-style">Message:</p>
             <textarea id="twit" type="text" name="thetweet" cols="100" rows="4"></textarea>
         </form> 
         <button class="login-button" type="button" onclick="tweet()">Submit</button>
@@ -214,7 +212,7 @@
 
 
 
-
+ 
 
 
 
